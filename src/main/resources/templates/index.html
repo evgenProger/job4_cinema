@@ -33,9 +33,18 @@
                 <th scope="col">#</th>
                 <th scope="col">Постер</th>
                 <th scope="col">Имя</th>
-
             </tr>
             </thead>
+            <tbody>
+            <tr th:each="session: ${sessions}">
+                <td>
+                    <img th:width="150" th:high="150" th:src="@{|/poster/${session.id}|}"
+                         alt="Poster" src="">
+                </td>
+                <span th:text="${session.name}"></span>
+            </tr>
+            </tbody>
         </table>
     </div>
+
 
