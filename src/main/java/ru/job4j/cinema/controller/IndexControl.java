@@ -1,11 +1,13 @@
 package ru.job4j.cinema.controller;
 
+import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
+@ThreadSafe
+@Controller
 public class IndexControl {
     private final SessionService sessionService;
 
@@ -38,7 +42,7 @@ public class IndexControl {
                                   @RequestParam("file") MultipartFile file) throws IOException {
         sessionService.add(session);
         String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-        File photo = new File("src/main/resources/films"
+        File photo = new File("src/main/resources/posters"
                 + File.separator
                 + session.getId()
                 + "."
@@ -53,11 +57,11 @@ public class IndexControl {
     @GetMapping("/poster/{sessionId}")
     public ResponseEntity<Resource> download(@PathVariable("sessionId") Integer sessionId) throws IOException {
         Session session = sessionService.findById(sessionId);
-        String photoName = Arrays.stream(Objects.requireNonNull(new File("src/main/resources/films")
+        String photoName = Arrays.stream(Objects.requireNonNull(new File("src/main/resources/posters")
                         .listFiles())).filter(f ->
                         f.getName().split("\\.")[0].equals(String.valueOf(sessionId)))
                 .findFirst().get().getName();
-        File photo = new File("src/main/resources/films" + File.separator + photoName);
+        File photo = new File("src/main/resources/posters" + File.separator + photoName);
         byte[] arr = Files.readAllBytes(photo.toPath());
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())
@@ -66,6 +70,8 @@ public class IndexControl {
                 .body(new ByteArrayResource(arr));
     }
 
-
-
+    @GetMapping("/addSession")
+    public String formAddPost(Model model) {
+        return "addSession";
+    }
 }

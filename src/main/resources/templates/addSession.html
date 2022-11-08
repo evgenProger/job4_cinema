@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,40 +17,44 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
+
+    <title>Кинотеатр</title>
+</head>
+<body>
+<div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Кинотеатр</a>
+        <a class="navbar-brand" href="#">Dream Job</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup"></div>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" th:href="@{/addSession}">Добавить фильм</a>
-        </div>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="#">Главная</a>
+            </div>
         </div>
     </nav>
-    <title>Кинотеатр</title>
-    <div class="container">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Постер</th>
-                <th scope="col">Имя</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="move: ${sessions}">
-                <td>
-                    <img th:width="150" th:high="150" th:src="@{|/poster/${move.id}|}"
-                         alt="Poster" src="">
-                </td>
-                <td>
-                    <span th:text="${move.name}"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Новый Фильм.
+            </div>
+            <div class="card-body">
+                <form th:action="@{/createSession}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Фотография</label>
+                        <input type="file" class="form-control" name="file" id="file">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" class="form-control" name="name" id="name">
+                        <input type="hidden" name="id" value="0"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
     </div>
-</head>
-
-
+</div>
+</body>
+</html>
