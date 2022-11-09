@@ -14,11 +14,11 @@ import java.util.List;
 @ThreadSafe
 @Repository
 public class SessionDbStore {
-    private final String selectAll = "select * from sessions";
-    private final String insertSession  = "insert into sessions (name) values (?)";
-    private final String findById = "select * from sessions where id = ? ";
-    private final String update = "update sessions set name = ?";
-    private final String delete = "delete from sessions where id = ?";
+    private static final String selectAll = "select * from sessions";
+    private static final String insertSession  = "insert into sessions (name) values (?)";
+    private static final String findById = "select * from sessions where id = ? ";
+    private static final String update = "update sessions set name = ? where id = ?";
+    private static final String delete = "delete from sessions where id = ?";
     private final BasicDataSource pool;
     private static final Logger LOG = LoggerFactory.getLogger(Session.class.getName());
 
@@ -48,7 +48,6 @@ public class SessionDbStore {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, session.getName());
-
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -77,18 +76,6 @@ public class SessionDbStore {
         return null;
     }
 
-    public boolean updateSession(Session session) {
-        boolean result = false;
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(update)) {
-            ps.setString(1, session.getName());
-            result = ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            LOG.error("Error", e);
-        }
-        return result;
-    }
-
     public boolean removeSession(int id) {
         boolean result = false;
         try (Connection cn = pool.getConnection();
@@ -101,8 +88,32 @@ public class SessionDbStore {
         return result;
     }
 
+    public int saveSession(Session session) {
+        int id;
+        if (session.getId() == 0) {
+            id =  add(session).getId();
+        } else {
+            updateSession(session);
+            id = session.getId();
+        }
+        return id;
+    }
+
     private  Session createSession(ResultSet it) throws SQLException {
         return new Session(it.getInt("id"),
                 it.getString("name"));
+    }
+
+    private boolean updateSession(Session session) {
+        boolean result = false;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(update)) {
+            ps.setString(1, session.getName());
+            ps.setInt(2, session.getId());
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            LOG.error("Error", e);
+        }
+        return result;
     }
 }

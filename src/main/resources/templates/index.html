@@ -18,6 +18,7 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css" />
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Кинотеатр</a>
@@ -43,11 +44,18 @@
             <tbody>
             <tr th:each="move: ${sessions}">
                 <td>
+                    <a
+                            th:href="cinemaSeat">
                     <img th:width="150" th:high="150" th:src="@{|/poster/${move.id}|}"
                          alt="Poster" src="">
+                    </a>
                     <a
                             th:href="@{|/deleteSession/${move.id}|}">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>
+                    <a
+                            th:href="@{|/formUpdateSession/${move.id}|}">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
                     </a>
                 </td>
                 <td>

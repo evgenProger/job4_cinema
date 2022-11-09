@@ -48,16 +48,7 @@ public class IndexControl {
     public String createSession(@ModelAttribute Session session,
                                   @RequestParam("file") MultipartFile file) throws IOException {
         sessionService.add(session);
-        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-        File photo = new File("src/main/resources/posters"
-                + File.separator
-                + session.getId()
-                + "."
-                + ext);
-        photo.createNewFile();
-        try (FileOutputStream out = new FileOutputStream(photo)) {
-            out.write(file.getBytes());
-        }
+        createPoster(session, file);
         return "redirect:/index";
     }
 
@@ -85,12 +76,51 @@ public class IndexControl {
     @RequestMapping("/deleteSession/{sessionId}")
     public String deleteSession(@PathVariable("sessionId") Integer sessionId)  {
         Session session = sessionService.findById(sessionId);
+        deletePoster(sessionId);
+        sessionService.deleteSession(sessionId);
+        return "redirect:/index";
+    }
+
+    @GetMapping("/formUpdateSession/{SessionId}")
+    public String formUpdateCandidate(Model model, @PathVariable("SessionId") int id) {
+        model.addAttribute("session", sessionService.findById(id));
+        deletePoster(id);
+        return "updateSession";
+    }
+
+    @PostMapping("/updateSession")
+    public String updateCandidate(@ModelAttribute Session session,
+                                  @RequestParam("file") MultipartFile file) throws IOException {
+        createPoster(session, file);
+        sessionService.saveSession(session);
+        return "redirect:/index";
+    }
+
+    @GetMapping("/seat")
+    public String seat(Model model) {
+        return "redirect:/cinemaSeat";
+    }
+
+    private void deletePoster(@PathVariable Integer sessionId) {
         File file = new File("src/main/resources/posters");
         Arrays.stream(Objects.requireNonNull(file.listFiles()))
                 .filter(f -> FilenameUtils.removeExtension(f.getName())
                         .equals(String.valueOf(sessionId)))
-                        .findFirst().ifPresent(File::delete);
-        sessionService.deleteSession(sessionId);
-        return "redirect:/index";
+                .findFirst().ifPresent(File::delete);
+    }
+
+    private void createPoster(@ModelAttribute Session session,
+                              @RequestParam("file") MultipartFile file) throws IOException {
+        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+        File photo = new File("src/main/resources/posters"
+                + File.separator
+                + session.getId()
+                + "."
+                + ext);
+        photo.createNewFile();
+        try (FileOutputStream out = new FileOutputStream(photo)) {
+            out.write(file.getBytes());
+        }
+
     }
 }

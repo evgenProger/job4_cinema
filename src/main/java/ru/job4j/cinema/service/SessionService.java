@@ -28,8 +28,8 @@ public class SessionService {
         return store.findById(id);
     }
 
-    public boolean updateCandidate(Session session) {
-        return store.updateSession(session);
+    public int saveSession(Session session) {
+        return store.saveSession(session);
     }
 
     public boolean deleteSession(int id) {
