@@ -1,115 +1,147 @@
-@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
 
-* {
-    box-sizing: border-box;
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
 }
-
-body {
-    background-color: #242333;
-    color: #fff;
+body{
+    background: rgb(2,0,36);
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgb(5, 5, 59) 100%, rgba(0,212,255,0.17970938375350143) 100%);
+    width: 100%;
+    height: 100vh;
+}
+.perde{
+    background-color: whitesmoke;
+    width: 800px;
+    height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 37%;
+    transform: translate(-50%);
+    box-shadow: 0px 20px 20px 0px rgb(255 255 255 / 49%);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    font-weight: 600;
+    font-size: large;
+}
+.container{
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    font-family: "Lato", sans-serif;
-    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%,-50%);
+}
+.seat{
+    /* background-color: #444454; */
+    height: 50px;
+    width: 80px;
+    margin: 7px;
 }
 
-.movie-container {
-    margin: 20px 0;
+.seat:nth-of-type(4){
+    margin-bottom: 30px;           /*   koltuğun 4. elemanından sonra 30px margin bottom bırak demek oluyor */
 }
-
-.movie-container select {
-    background-color: #fff;
-    border: 0;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-left: 10px;
-    padding: 5px 15px 5px 15px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.container {
-    perspective: 1000px;
+.seat:nth-last-of-type(4){        /*   koltuğun sondan 4. elemanından sonra 30px margin bottom bırak demek oluyor */
     margin-bottom: 30px;
 }
 
-.seat {
-    background-color: #444451;
-    height: 26px;
-    width: 32px;
-    margin: 3px;
-    font-size: 50px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.seat.selected {
-    background-color: green;
-}
-
-.seat.sold {
-    background-color: #fff;
-}
-
-.seat:nth-of-type(2) {
-    margin-right: 18px;
-}
-
-.seat:nth-last-of-type(2) {
-    margin-left: 18px;
-}
-
-.seat:not(.sold):hover {
-    cursor: pointer;
-    transform: scale(1.2);
-}
-
-.showcase .seat:not(.sold):hover {
-    cursor: default;
-    transform: scale(1);
-}
-
-.showcase {
-    background: rgba(0, 0, 0, 0.1);
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #777;
-    list-style-type: none;
-    display: flex;
-    justify-content: space-between;
-}
-
-.showcase li {
-    display: flex;
-    align-items: center;
+#soldansağarakam{
+    width: 80px;
+    height: 30px;
+    font-size: 25px;
+    color: red;
+    background: none;
+    text-align: center;
     justify-content: center;
-    margin: 0 10px;
 }
-.showcase li small {
-    margin-left: 2px;
+.yukardanaşağıharf{
+    position: relative;
+    text-align: end;
+    background: none;
+}
+button{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+button:not(.dolu , .seçili):hover{            /*buttonun üzerine geldiğinde arkaplanını gri yap ama .rezerve ve .alınmış classı var ise yapma. */
+    background-color: gray;
 }
 
-.row {
+#budeneme{
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(-50%,-50%);
+    font-size: 25px;
+    color: red;
+
+}
+
+.info{
+    text-decoration: none;
+    list-style: none;
+    position: absolute;
+    right: 15%;
+    bottom: 8%;
     display: flex;
 }
 
-.screen {
-    background-color: #fff;
-    height: 120px;
-    width: 100%;
-    margin: 15px 0;
-    transform: rotateX(-48deg);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+.ücretalan{
+    width: 400px;
+    height: 600px;
+    background-color: rgb(255, 226, 226);
+    position: absolute;
+    top: 53%;
+    right: 4%;
+    transform: translate(0%,-50%);
+    border-radius: 20px;
 }
 
-p.text{
-    margin: 5px 0;
+.film-listesi{
+    width: 200px;
+    height: 50px;
+    position: absolute;
+    right: 35%;
+    top: 10%;
+}
+select{
+    width: 300px;
+}
+.text{
+    color: darkblue;
+    position: absolute;
+    top: 20%;
+    right: 8%;
+    font-weight: 600;
 }
 
-p.text span{
-    color: rgb(158, 248, 158);
+.dolu{
+    background-color: red;
+}
+
+.seçili{
+    background-color: chocolate;
+}
+
+#filmsayısı{
+    color: rgb(14, 172, 98);
+}
+#ücret{
+    color: rgb(14, 172, 98);
+}
+#logo{
+    position: absolute;
+    top: 30%;
+}
+#uyarıyazıid{
+    position: absolute;
+    top: 2%;
+    left: 10%;
+    color: red;
+}
+.uyarıyazı{
+    display: none;
 }
