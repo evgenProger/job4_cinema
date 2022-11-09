@@ -17,7 +17,8 @@ public class SessionDbStore {
     private final String selectAll = "select * from sessions";
     private final String insertSession  = "insert into sessions (name) values (?)";
     private final String findById = "select * from sessions where id = ? ";
-    private final String update = "UPDATE sessions set name = ?";
+    private final String update = "update sessions set name = ?";
+    private final String delete = "delete from sessions where id = ?";
     private final BasicDataSource pool;
     private static final Logger LOG = LoggerFactory.getLogger(Session.class.getName());
 
@@ -84,6 +85,18 @@ public class SessionDbStore {
             result = ps.executeUpdate() > 0;
         } catch (Exception e) {
             LOG.error("Error", e);
+        }
+        return result;
+    }
+
+    public boolean removeSession(int id) {
+        boolean result = false;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(delete)) {
+            ps.setInt(1, id);
+            result = ps.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return result;
     }

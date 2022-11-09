@@ -32,4 +32,8 @@ public class SessionService {
         return store.updateSession(session);
     }
 
+    public boolean deleteSession(int id) {
+        return store.removeSession(id);
+    }
+
 }

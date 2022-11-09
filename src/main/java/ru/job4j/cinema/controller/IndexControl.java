@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.service.SessionService;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ThreadSafe
 @Controller
@@ -35,6 +37,11 @@ public class IndexControl {
     public String sessions(Model model) {
         model.addAttribute("sessions", sessionService.findAll());
         return "index";
+    }
+
+    @GetMapping("/")
+    public String index2(Model model) {
+        return "redirect:/index";
     }
 
     @PostMapping("/createSession")
@@ -73,5 +80,17 @@ public class IndexControl {
     @GetMapping("/addSession")
     public String formAddPost(Model model) {
         return "addSession";
+    }
+
+    @RequestMapping("/deleteSession/{sessionId}")
+    public String deleteSession(@PathVariable("sessionId") Integer sessionId)  {
+        Session session = sessionService.findById(sessionId);
+        File file = new File("src/main/resources/posters");
+        Arrays.stream(Objects.requireNonNull(file.listFiles()))
+                .filter(f -> FilenameUtils.removeExtension(f.getName())
+                        .equals(String.valueOf(sessionId)))
+                        .findFirst().ifPresent(File::delete);
+        sessionService.deleteSession(sessionId);
+        return "redirect:/index";
     }
 }
