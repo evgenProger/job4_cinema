@@ -8,10 +8,17 @@ public class User {
     private String email;
     private String phone;
 
-    public User(int id, String name) {
+    public User() {
+
+    }
+
+    public User(int id, String name, String email, String phone) {
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.phone = phone;
     }
+
 
     public int getId() {
         return id;
@@ -31,8 +38,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return id == user.id;
     }
@@ -40,5 +51,21 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

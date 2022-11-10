@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cinema.model.Session;
+import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.SessionService;
 
 import javax.servlet.http.HttpSession;
@@ -19,23 +20,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @ThreadSafe
 @Controller
-public class IndexControl {
+public class IndexController {
     private final SessionService sessionService;
 
-    public IndexControl(SessionService sessionService) {
+    public IndexController(SessionService sessionService) {
         this.sessionService = sessionService;
     }
 
     @GetMapping("/index")
-    public String sessions(Model model) {
+    public String sessions(Model model, HttpSession session) {
         model.addAttribute("sessions", sessionService.findAll());
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "index";
     }
 
@@ -96,11 +101,6 @@ public class IndexControl {
         return "redirect:/index";
     }
 
-    @GetMapping("/seat")
-    public String seat(Model model) {
-        return "redirect:/cinemaSeat";
-    }
-
     private void deletePoster(@PathVariable Integer sessionId) {
         File file = new File("src/main/resources/posters");
         Arrays.stream(Objects.requireNonNull(file.listFiles()))
@@ -121,6 +121,10 @@ public class IndexControl {
         try (FileOutputStream out = new FileOutputStream(photo)) {
             out.write(file.getBytes());
         }
+    }
 
+    @GetMapping("/cinemaSeat")
+    public String cinemaSeat() {
+        return "cinemaSeat";
     }
 }

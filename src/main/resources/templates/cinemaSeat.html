@@ -1,366 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>Movie Seat Booking</title>
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
+        * {
+            box-sizing: border-box;
         }
-        body{
-            background: rgb(2,0,36);
-            background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgb(5, 5, 59) 100%, rgba(0,212,255,0.17970938375350143) 100%);
-            width: 100%;
-            height: 100vh;
-        }
-        .perde{
-            background-color: whitesmoke;
-            width: 800px;
-            height: 30px;
-            position: absolute;
-            top: 5px;
-            left: 37%;
-            transform: translate(-50%);
-            box-shadow: 0px 20px 20px 0px rgb(255 255 255 / 49%);
+
+        body {
+            background-color: #242333;
+            color: #fff;
             display: flex;
-            justify-content: center;
-            font-weight: 600;
-            font-size: large;
-        }
-        .container{
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: absolute;
-            top: 50%;
-            left: 35%;
-            transform: translate(-50%,-50%);
-        }
-        .seat{
-            /* background-color: #444454; */
-            height: 50px;
-            width: 80px;
-            margin: 7px;
+            height: 100vh;
+            font-family: "Lato", sans-serif;
+            margin: 0;
         }
 
-        .seat:nth-of-type(4){
-            margin-bottom: 30px;           /*   koltuğun 4. elemanından sonra 30px margin bottom bırak demek oluyor */
+        .movie-container {
+            margin: 20px 0;
         }
-        .seat:nth-last-of-type(4){        /*   koltuğun sondan 4. elemanından sonra 30px margin bottom bırak demek oluyor */
+
+        .movie-container select {
+            background-color: #fff;
+            border: 0;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-left: 10px;
+            padding: 5px 15px 5px 15px;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .container {
+            perspective: 1000px;
             margin-bottom: 30px;
         }
 
-        #soldansağarakam{
-            width: 80px;
-            height: 30px;
-            font-size: 25px;
-            color: red;
-            background: none;
-            text-align: center;
+        .seat {
+            background-color: #444451;
+            height: 26px;
+            width: 32px;
+            margin: 3px;
+            font-size: 50px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .seat.selected {
+            background-color: green;
+        }
+
+        .seat.sold {
+            background-color: #fff;
+        }
+
+        .seat:nth-of-type(2) {
+            margin-right: 18px;
+        }
+
+        .seat:nth-last-of-type(2) {
+            margin-left: 18px;
+        }
+
+        .seat:not(.sold):hover {
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+
+        .showcase .seat:not(.sold):hover {
+            cursor: default;
+            transform: scale(1);
+        }
+
+        .showcase {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #777;
+            list-style-type: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .showcase li {
+            display: flex;
+            align-items: center;
             justify-content: center;
-        }
-        .yukardanaşağıharf{
-            position: relative;
-            text-align: end;
-            background: none;
-        }
-        button{
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-        }
-        button:not(.dolu , .seçili):hover{            /*buttonun üzerine geldiğinde arkaplanını gri yap ama .rezerve ve .alınmış classı var ise yapma. */
-            background-color: gray;
+            margin: 0 10px;
         }
 
-        #budeneme{
-            position: absolute;
-            top: 50%;
-            right: 0%;
-            transform: translate(-50%,-50%);
-            font-size: 25px;
-            color: red;
-
+        .showcase li small {
+            margin-left: 2px;
         }
 
-        .info{
-            text-decoration: none;
-            list-style: none;
-            position: absolute;
-            right: 15%;
-            bottom: 8%;
+        .row {
             display: flex;
         }
 
-        .ücretalan{
-            width: 400px;
-            height: 600px;
-            background-color: rgb(255, 226, 226);
-            position: absolute;
-            top: 53%;
-            right: 4%;
-            transform: translate(0%,-50%);
-            border-radius: 20px;
+        .screen {
+            background-color: #fff;
+            height: 120px;
+            width: 100%;
+            margin: 15px 0;
+            transform: rotateX(-48deg);
+            box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
         }
 
-        .film-listesi{
-            width: 200px;
-            height: 50px;
-            position: absolute;
-            right: 35%;
-            top: 10%;
-        }
-        select{
-            width: 300px;
-        }
-        .text{
-            color: darkblue;
-            position: absolute;
-            top: 20%;
-            right: 8%;
-            font-weight: 600;
+        p.text {
+            margin: 5px 0;
         }
 
-        .dolu{
-            background-color: red;
-        }
-
-        .seçili{
-            background-color: chocolate;
-        }
-
-        #filmsayısı{
-            color: rgb(14, 172, 98);
-        }
-        #ücret{
-            color: rgb(14, 172, 98);
-        }
-        #logo{
-            position: absolute;
-            top: 30%;
-        }
-        #uyarıyazıid{
-            position: absolute;
-            top: 2%;
-            left: 10%;
-            color: red;
-        }
-        .uyarıyazı{
-            display: none;
+        p.text span {
+            color: rgb(158, 248, 158);
         }
     </style>
 </head>
 <body>
-
-<div class="perde">PERDE</div>
-
+<ul class="showcase">
+    <li>
+        <div class="seat"></div>
+        <small>Available</small>
+    </li>
+    <li>
+        <div class="seat selected"></div>
+        <small>Selected</small>
+    </li>
+    <li>
+        <div class="seat sold"></div>
+        <small>Sold</small>
+    </li>
+</ul>
 <div class="container">
-
-    <div class="row abcd">
-        <div class="seat" id="soldan"></div>
-        <div class="seat yukardanaşağıharf"><p id="b">A</p></div>
-        <div class="seat yukardanaşağıharf"><p id="bu">B</p></div>
-        <div class="seat yukardanaşağıharf"><p id="bud">C</p></div>
-        <div class="seat yukardanaşağıharf"><p id="bude">D</p></div>
-        <div class="seat yukardanaşağıharf"><p id="buden">E</p></div>
-        <div class="seat yukardanaşağıharf"><p id="budenem">F</p></div>
-        <div class="seat yukardanaşağıharf"><p id="budenemes">G</p></div>
-        <div class="seat yukardanaşağıharf"><p id="budenemed">H</p></div>
-        <div class="seat yukardanaşağıharf"><p id="budenemef">J</p></div>
-        <div class="seat yukardanaşağıharf"><p id="budenemeg">K</p></div>
-
-    </div>
-
-    <div class="row 1">
-        <div class="rollup" id="solda">1</div>
-        <div class="seat"><button class="btnseat">A1</button></div>
-        <div class="seat"><button class="btnseat">B1</button></div>
-        <div class="seat"><button class="btnseat">C1</button></div>
-        <div class="seat"><button class="btnseat">D1</button></div>
-        <div class="seat"><button class="btnseat">E1</button></div>
-        <div class="seat"><button class="btnseat">F1</button></div>
-        <div class="seat"><button class="btnseat">G1</button></div>
-        <div class="seat"><button class="btnseat">H1</button></div>
-        <div class="seat"><button class="btnseat">J1</button></div>
-        <div class="seat"><button class="btnseat">K1</button></div>
-
-    </div>
-
-    <div class="row">
-        <div class="seat" id="sold">2</div>
-        <div class="seat"><button class="btnseat">A2</button></div>
-        <div class="seat"><button class="btnseat">B2</button></div>
-        <div class="seat"><button class="btnseat">C2</button></div>
-        <div class="seat"><button class="btnseat">D2</button></div>
-        <div class="seat"><button class="btnseat">E2</button></div>
-        <div class="seat"><button class="dolu">F2</button></div>
-        <div class="seat"><button class="btnseat">G2</button></div>
-        <div class="seat"><button class="btnseat">H2</button></div>
-        <div class="seat"><button class="btnseat">J2</button></div>
-        <div class="seat"><button class="btnseat">K2</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="sol">3</div>
-        <div class="seat"><button class="btnseat">A3</button></div>
-        <div class="seat"><button class="btnseat">B3</button></div>
-        <div class="seat"><button class="btnseat">C3</button></div>
-        <div class="seat"><button class="btnseat">D3</button></div>
-        <div class="seat"><button class="btnseat">E3</button></div>
-        <div class="seat"><button class="btnseat">F3</button></div>
-        <div class="seat"><button class="btnseat">G3</button></div>
-        <div class="seat"><button class="btnseat">H3</button></div>
-        <div class="seat"><button class="btnseat">J3</button></div>
-        <div class="seat"><button class="btnseat">K3</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="so">4</div>
-        <div class="seat"><button class="btnseat">A4</button></div>
-        <div class="seat"><button class="btnseat">B4</button></div>
-        <div class="seat"><button class="btnseat">C4</button></div>
-        <div class="seat"><button class="btnseat">D4</button></div>
-        <div class="seat"><button class="btnseat">E4</button></div>
-        <div class="seat"><button class="btnseat">F4</button></div>
-        <div class="seat"><button class="btnseat">G4</button></div>
-        <div class="seat"><button class="btnseat">H4</button></div>
-        <div class="seat"><button class="btnseat">J4</button></div>
-        <div class="seat"><button class="btnseat">K4</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="s">5</div>
-        <div class="seat"><button class="btnseat">A5</button></div>
-        <div class="seat"><button class="btnseat">B5</button></div>
-        <div class="seat"><button class="btnseat">C5</button></div>
-        <div class="seat"><button class="btnseat">D5</button></div>
-        <div class="seat"><button class="btnseat">E5</button></div>
-        <div class="seat"><button class="btnseat">F5</button></div>
-        <div class="seat"><button class="btnseat">G5</button></div>
-        <div class="seat"><button class="btnseat">H5</button></div>
-        <div class="seat"><button class="btnseat">J5</button></div>
-        <div class="seat"><button class="btnseat">K5</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="soldans">6</div>
-        <div class="seat"><button class="btnseat">A6</button></div>
-        <div class="seat"><button class="btnseat">B6</button></div>
-        <div class="seat"><button class="btnseat">C6</button></div>
-        <div class="seat"><button class="btnseat">D6</button></div>
-        <div class="seat"><button class="btnseat">E6</button></div>
-        <div class="seat"><button class="btnseat">F6</button></div>
-        <div class="seat"><button class="btnseat">G6</button></div>
-        <div class="seat"><button class="btnseat">H6</button></div>
-        <div class="seat"><button class="btnseat">J6</button></div>
-        <div class="seat"><button class="btnseat">K6</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="soldansa">7</div>
-        <div class="seat"><button class="btnseat">A7</button></div>
-        <div class="seat"><button class="btnseat">B7</button></div>
-        <div class="seat"><button class="btnseat">C7</button></div>
-        <div class="seat"><button class="btnseat">D7</button></div>
-        <div class="seat"><button class="btnseat">E7</button></div>
-        <div class="seat"><button class="btnseat">F7</button></div>
-        <div class="seat"><button class="btnseat">G7</button></div>
-        <div class="seat"><button class="btnseat">H7</button></div>
-        <div class="seat"><button class="btnseat">J7</button></div>
-        <div class="seat"><button class="btnseat">K7</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="soldansağ">8</div>
-        <div class="seat"><button class="btnseat">A8</button></div>
-        <div class="seat"><button class="btnseat">B8</button></div>
-        <div class="seat"><button class="btnseat">C8</button></div>
-        <div class="seat"><button class="btnseat">D8</button></div>
-        <div class="seat"><button class="btnseat">E8</button></div>
-        <div class="seat"><button class="btnseat">F8</button></div>
-        <div class="seat"><button class="btnseat">G8</button></div>
-        <div class="seat"><button class="btnseat">H8</button></div>
-        <div class="seat"><button class="btnseat">J8</button></div>
-        <div class="seat"><button class="btnseat">K8</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="soldansağa">9</div>
-        <div class="seat"><button class="btnseat">A9</button></div>
-        <div class="seat"><button class="btnseat">B9</button></div>
-        <div class="seat"><button class="btnseat">C9</button></div>
-        <div class="seat"><button class="btnseat">D9</button></div>
-        <div class="seat"><button class="btnseat">E9</button></div>
-        <div class="seat"><button class="btnseat">F9</button></div>
-        <div class="seat"><button class="btnseat">G9</button></div>
-        <div class="seat"><button class="btnseat">H9</button></div>
-        <div class="seat"><button class="btnseat">J9</button></div>
-        <div class="seat"><button class="btnseat">K9</button></div>
-    </div>
-
-    <div class="row">
-        <div class="seat" id="soldansağarakam">10</div>
-        <div class="seat"><button class="btnseat">A10</button></div>
-        <div class="seat"><button class="btnseat">B10</button></div>
-        <div class="seat"><button class="btnseat">C10</button></div>
-        <div class="seat"><button class="btnseat">D10</button></div>
-        <div class="seat"><button class="btnseat">E10</button></div>
-        <div class="seat"><button class="btnseat">F10</button></div>
-        <div class="seat"><button class="btnseat">G10</button></div>
-        <div class="seat"><button class="btnseat">H10</button></div>
-        <div class="seat"><button class="btnseat">J10</button></div>
-        <div class="seat"><button class="btnseat">K10</button></div>
+    <div class="screen"></div>
+    <div th:each="row: ${#numbers.sequence(0, 6, 1)}">
+        <div class="row">
+            <div th:each="seat: ${#numbers.sequence(0, 8, 1)}">
+                <a th:href="@{|/selectSeat/${row}/${seat}|}">
+                    <div class="seat"></div>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
-
-
-<div class="ücretalan">
-    <h2 class="uyarıyazı" id="uyarıyazıid">Lütfen ilk önce film seçiniz !!</h2>
-    <div class="film-listesi">
-        <select id="film">
-            <option class="film1" value="0" selected disabled>Film Seçiniz</option>
-            <option value="40">Film 1</option>
-            <option value="45">Hızlı ve Öfkeli 3 : Tokyo Drift</option>
-            <option value="50">Film 3</option>
-            <option value="55">Hızlı ve Öfkeli 7</option>
-            <option value="60">Film 5</option>
-        </select>
-    </div>
-
-
-    <img id="logo" src="sinemalogo.png" width="400px" height="300px">
-
-
-    <ul class="info">
-        <li>
-            <div class="seat">
-                <button class="dolu">Dolu</button>
-            </div>
-        </li>
-
-        <li>
-            <div class="seat">
-                <button class="seçili">Seçili</button>
-            </div>
-        </li>
-
-        <li>
-            <div class="seat">
-                <button>Boş</button>
-            </div>
-        </li>
-    </ul>
-
-    <p class="text">
-        Seçtiğiniz<span id="filmsayısı"> 0 </span>film için ödeyeceğiniz ücret<span id="ücret"> 0 </span>TL</p>
-</div>
-
+<p class="text">
+    You have selected <span id="count">0</span> seat for a price of RS.<span
+        id="total"
+>0</span
+>
+</p>
 <script src="script.js"></script>
 </body>
 </html>
