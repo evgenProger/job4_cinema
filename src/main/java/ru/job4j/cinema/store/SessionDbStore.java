@@ -14,11 +14,11 @@ import java.util.List;
 @ThreadSafe
 @Repository
 public class SessionDbStore {
-    private static final String selectAll = "select * from sessions";
-    private static final String insertSession  = "insert into sessions (name) values (?)";
-    private static final String findById = "select * from sessions where id = ? ";
-    private static final String update = "update sessions set name = ? where id = ?";
-    private static final String delete = "delete from sessions where id = ?";
+    private static final String selectAll = "select * from session";
+    private static final String insertSession  = "insert into session (name) values (?)";
+    private static final String findById = "select * from session where id = ? ";
+    private static final String update = "update session set name = ? where id = ?";
+    private static final String delete = "delete from session where id = ?";
     private final BasicDataSource pool;
     private static final Logger LOG = LoggerFactory.getLogger(Session.class.getName());
 

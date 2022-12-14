@@ -2,17 +2,17 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
-public class User {
+public class Client {
     private int id;
     private String name;
     private String email;
     private String phone;
 
-    public User() {
+    public Client() {
 
     }
 
-    public User(int id, String name, String email, String phone) {
+    public Client(int id, String name, String email, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -44,8 +44,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User user = (User) o;
-        return id == user.id;
+        Client client = (Client) o;
+        return id == client.id;
     }
 
     @Override

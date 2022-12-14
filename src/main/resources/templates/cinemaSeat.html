@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="style.css"/>
     <title>Movie Seat Booking</title>
+    <script> src = "src/main/resources/templates/bookTicket.js" </script>
     <style>
         * {
             box-sizing: border-box;
@@ -46,6 +48,16 @@
 
         .seat {
             background-color: #444451;
+            height: 26px;
+            width: 32px;
+            margin: 3px;
+            font-size: 50px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .sold {
+            background-color: #fff;
             height: 26px;
             width: 32px;
             margin: 3px;
@@ -138,24 +150,43 @@
         <small>Sold</small>
     </li>
 </ul>
+<button id='buyButton'>Купить выбранные</button>
 <div class="container">
     <div class="screen"></div>
-    <div th:each="row: ${#numbers.sequence(0, 6, 1)}">
-        <div class="row">
-            <div th:each="seat: ${#numbers.sequence(0, 8, 1)}">
-                <a th:href="@{|/selectSeat/${row}/${seat}|}">
-                    <div class="seat"></div>
-                </a>
-            </div>
-        </div>
-    </div>
+    <div id="main"></div>
+    <script th:inline="javascript">
+        var flag = false;
+        var tickets = [[${tickets}]];
+        var bookedTickets = [[${bookedTickets}]];
+        for (var i = 0; i < 6; i++) {
+            document.write('<div class="row">')
+            for (var j = 0; j < 8; j++) {
+                var t = document.createTextNode('<a href = http://localhost:8080/selectSeat/'
+                    + i.toString() + '/' + j.toString() + '>');
+                document.write(t.data);
+                for (var k = 0; k < tickets.length && !flag; k++) {
+                    if (tickets[k].row === i && tickets[k].cell === j) {
+                        flag = true;
+                        document.write('<div class="sold"></div> </a>')
+                    }
+                }
+                if (bookedTickets !== null) {
+                    console.log("Я тут");
+                    for (var booked = 0; booked < bookedTickets.length && !flag; booked++) {
+                        if (bookedTickets[booked].row === i && bookedTickets[booked].cell === j) {
+                            flag = true;
+                            document.write('<div class="seat selected"></div> </a>');
+                        }
+                    }
+                }
+                if (!flag) {
+                    document.write('<div class="seat"></div> </a>');
+                }
+                flag = false;
+            }
+            document.write('</div>');
+        }
+    </script>
 </div>
-<p class="text">
-    You have selected <span id="count">0</span> seat for a price of RS.<span
-        id="total"
->0</span
->
-</p>
-<script src="script.js"></script>
 </body>
 </html>

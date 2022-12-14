@@ -11,9 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cinema.model.Client;
 import ru.job4j.cinema.model.Session;
-import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.SessionService;
+import ru.job4j.cinema.service.TicketService;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -27,20 +28,22 @@ import java.util.Objects;
 @Controller
 public class IndexController {
     private final SessionService sessionService;
+    private final TicketService ticketService;
 
-    public IndexController(SessionService sessionService) {
+    public IndexController(SessionService sessionService, TicketService ticketService) {
         this.sessionService = sessionService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping("/index")
     public String sessions(Model model, HttpSession session) {
         model.addAttribute("sessions", sessionService.findAll());
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
+        Client client = (Client) session.getAttribute("client");
+        if (client == null) {
+            client = new Client();
+            client.setName("Гость");
         }
-        model.addAttribute("user", user);
+        model.addAttribute("client", client);
         return "index";
     }
 
@@ -123,8 +126,10 @@ public class IndexController {
         }
     }
 
-    @GetMapping("/cinemaSeat")
-    public String cinemaSeat() {
+    @GetMapping("/cinemaSeat/{id}")
+    public String cinemaSeat(Model model, @PathVariable("id") int id, HttpSession session) {
+        model.addAttribute("tickets", ticketService.findAll());
+        session.setAttribute("id", id);
         return "cinemaSeat";
     }
 }
