@@ -32,4 +32,8 @@ public class TicketService {
     public Ticket findByRowAndCell(int row, int cell) {
         return store.findByRowAndCell(row, cell);
     }
+
+    public Ticket findByRowAndCellAndSessionId(int row, int cell, int idSession) {
+        return null;
+    }
 }
